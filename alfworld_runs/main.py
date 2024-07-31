@@ -9,14 +9,14 @@ from typing import Any, List, Dict
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--num_trials", type=int, help="The number of trials to run")
-    parser.add_argument("--num_envs", type=int, help="The number of environments per trial")
-    parser.add_argument("--run_name", type=str, help="The name of the run")
-    parser.add_argument("--use_memory", action='store_true', help="Allow the Agent to use memory")
+    parser.add_argument("--num_trials", type=int, help="The number of trials to run",  default=11)
+    parser.add_argument("--num_envs", type=int, help="The number of environments per trial", default=134)
+    parser.add_argument("--run_name", type=str, help="The name of the run", default="reflexion_run_logs")
+    parser.add_argument("--use_memory", action='store_true', help="Allow the Agent to use memory", default=True)
     parser.add_argument("--is_resume", action='store_true', help="To resume run")
     parser.add_argument("--resume_dir", type=str, help="If resume, the logging directory", default="")
     parser.add_argument("--start_trial_num", type=int, help="If resume, the start trial num", default=0)
-    parser.add_argument("--model", type=str, help="The model to use. One of `gpt-4`, `gpt-3.5-turbo`, or `text-davinci-003")
+    parser.add_argument("--model", type=str, default="gpt-3.5-turbo", help="The model to use. One of `gpt-4`, `gpt-3.5-turbo`, or `text-davinci-003")
 
     args = parser.parse_args()
 

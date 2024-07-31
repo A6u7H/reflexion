@@ -1,6 +1,6 @@
 import os
 import sys
-import openai
+from openai import OpenAI
 from tenacity import (
     retry,
     stop_after_attempt, # type: ignore
@@ -16,13 +16,25 @@ else:
 
 Model = Literal["gpt-4", "gpt-3.5-turbo", "text-davinci-003"]
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# openai.api_key = os.getenv('OPENAI_API_KEY')
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
 def get_completion(prompt: str, temperature: float = 0.0, max_tokens: int = 256, stop_strs: Optional[List[str]] = None) -> str:
-    response = openai.Completion.create(
+    # response = openai.Completion.create(
+    #     model='text-davinci-003',
+        # prompt=prompt,
+        # temperature=temperature,
+        # max_tokens=max_tokens,
+        # top_p=1,
+        # frequency_penalty=0.0,
+        # presence_penalty=0.0,
+        # stop=stop_strs,
+    # )
+    messages = [{"role": "system", "content": prompt}]
+    response = client.chat.completions.create( 
         model='text-davinci-003',
-        prompt=prompt,
+        messages=messages,
         temperature=temperature,
         max_tokens=max_tokens,
         top_p=1,
@@ -30,22 +42,17 @@ def get_completion(prompt: str, temperature: float = 0.0, max_tokens: int = 256,
         presence_penalty=0.0,
         stop=stop_strs,
     )
-    return response.choices[0].text
+    return response.choices[0].message.content
 
 @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
 def get_chat(prompt: str, model: Model, temperature: float = 0.0, max_tokens: int = 256, stop_strs: Optional[List[str]] = None, is_batched: bool = False) -> str:
     assert model != "text-davinci-003"
-    messages = [
-        {
-            "role": "user",
-            "content": prompt
-        }
-    ]
-    response = openai.ChatCompletion.create(
+    messages = [{"role": "system", "content": prompt}]
+    response = client.chat.completions.create(
         model=model,
         messages=messages,
         max_tokens=max_tokens,
         stop=stop_strs,
         temperature=temperature,
     )
-    return response.choices[0]["message"]["content"]
+    return response.choices[0].message.content

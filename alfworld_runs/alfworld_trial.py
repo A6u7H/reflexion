@@ -14,7 +14,7 @@ from env_history import EnvironmentHistory
 from typing import List, Dict, Any, Tuple
  
 openai.api_key = os.environ["OPENAI_API_KEY"]
-FOLDER = './prompts'
+FOLDER = './alfworld_runs/prompts'
 PROMPT_FILE = 'alfworld_3prompts.json'
 with open(os.path.join(FOLDER, PROMPT_FILE), 'r') as f:
     d = json.load(f)
@@ -91,7 +91,7 @@ def run_trial(
     importlib.reload(alfworld)
     importlib.reload(alfworld.agents.environment)
 
-    with open('base_config.yaml') as reader:
+    with open('alfworld_runs/base_config.yaml') as reader:
         config = yaml.safe_load(reader)
     split = "eval_out_of_distribution"
 

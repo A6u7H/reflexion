@@ -2,7 +2,7 @@ from utils import get_completion
 
 from typing import List, Dict, Any
 
-with open("./reflexion_few_shot_examples.txt", 'r') as f:
+with open("./alfworld_runs/reflexion_few_shot_examples.txt", 'r') as f:
     FEW_SHOT_EXAMPLES = f.read()
 
 def _get_scenario(s: str) -> str:
